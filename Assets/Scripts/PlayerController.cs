@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,13 +11,27 @@ public class PlayerController : MonoBehaviour
     private float movementX;
     private float movementY;
     public float speed = 2;
+    private int cubeCount;
+    public TextMeshProUGUI countText;
+    public GameObject finishedText;
 
 
+    void setCountText()
+    {
+        countText.text = "count = " + cubeCount.ToString();
+        if (cubeCount >= 3)
+        {
+            finishedText.SetActive(true);
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
         Debug.Log("startup");
-        rb = GetComponent<Rigidbody>();      
+        rb = GetComponent<Rigidbody>();
+        cubeCount = 0;
+        setCountText();
+        finishedText.SetActive(false);
     }
 
     void OnMove(InputValue movementValue){
@@ -39,6 +54,8 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("PickUp"))
         {
             other.gameObject.SetActive(false);
+            cubeCount = cubeCount + 1;
+            setCountText();
         }
     }
 }
